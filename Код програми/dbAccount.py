@@ -50,7 +50,4 @@ def print_account_data():
         SELECT * FROM Account
         ''')
         rows = cursor.fetchall()
-        print("Account data:")
-        for row in rows:
-            print(f"Account ID: {row[0]}, Name: {row[1]}, Type: {row[2]}, Balance: {row[3]}")
     return rows

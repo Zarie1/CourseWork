@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.ttk import Treeview
 from dbSearchIE import *
 from CategoryWindow import *
+from AccountWindow import *
 
 # Функція для пошуку за фільтрами та виводу результатів
 def search():
@@ -58,7 +59,7 @@ typesMenu.place(x=312, y=24)
 
 Button(mainwin, text="Пошук", font="Arial 12", width=7, height=1, command=search).place(x=405, y=24)
 Button(mainwin, text="Категорії", font="Arial 12", width=11, height=1, command=Category).place(x=400, y=80)
-Button(mainwin, text="Рахунки", font="Arial 12", width=11, height=1).place(x=400, y=120)
+Button(mainwin, text="Рахунки", font="Arial 12", width=11, height=1, command=Account).place(x=400, y=120)
 Button(mainwin, text="Операції", font="Arial 12", width=11, height=1).place(x=400, y=160)
 
 
