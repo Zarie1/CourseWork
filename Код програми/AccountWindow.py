@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import Treeview
+from tkinter import messagebox
 from dbAccount import *
 
 class Account(Toplevel):
@@ -30,14 +31,14 @@ class Account(Toplevel):
         self.table = Treeview(self, columns=("ID", "Назва", "Тип", "Баланс"), show="headings", height=8,selectmode="browse")
         self.table.place(x=50, y=270)
 
-        self.updateTable()
-
         headings = {"ID": 20, "Назва": 100, "Тип": 100, "Баланс": 80}
         for head in headings:
             self.table.heading(head, text=head)
             self.table.column(head, anchor="center", width=headings[head])
+
+        self.updateTable()
     def getIdList(self):
-        accounts = print_account_data()
+        accounts = DbAccount().print_account_data()
         newList = []
         if accounts == []: newList.append("Пусто")
         else:
@@ -52,36 +53,42 @@ class Account(Toplevel):
         self.idMenu.place(x=260, y=39)
     def updateTable(self):
         self.table.delete(*self.table.get_children())
-        rows = print_account_data()
+        rows = DbAccount().print_account_data()
         for row in rows: self.table.insert('', 'end', values=(row[0], row[1], row[2], row[3]))
     def createAccount(self):
         name = self.accountTextName.get().lower()
         type = self.accountTextType.get().lower()
         if name != "":
-            create_account(name, type)
+            DbAccount().create_account(name, type)
             self.updateIdList()
             self.updateTable()
             self.accountTextName.delete(0, END)
             self.accountTextType.delete(0, END)
+        else:
+            messagebox.showerror("Помилка", "Заповніть поле з назвою рахунку")
     def deleteAccount(self):
         try:
-            delete_account(int(self.listId.get()))
+            DbAccount().delete_account(int(self.listId.get()))
             self.updateIdList()
             self.updateTable()
-        except ValueError: print("Пусто")
+        except ValueError: messagebox.showerror("Помилка","Немає рахунку для видалення")
     def updateAccount(self):
         name = self.accountTextName.get().lower()
         if name != "":
             try:
-                update_account(int(self.listId.get()),name)
+                DbAccount().update_account(int(self.listId.get()), name)
                 self.updateTable()
                 self.accountTextName.delete(0, END)
-            except ValueError:print("Пусто")
+            except ValueError:messagebox.showerror("Помилка","Немає рахунку для змін")
+        else:
+            messagebox.showerror("Помилка", "Заповніть поле з новою назвою рахунку")
     def updateAccountData(self):
         type = self.accountTextType.get().lower()
         if type != "":
             try:
-                update_account_type(int(self.listId.get()),type)
+                DbAccount().update_account_type(int(self.listId.get()), type)
                 self.updateTable()
                 self.accountTextType.delete(0, END)
-            except ValueError:print("Пусто")
+            except ValueError:messagebox.showerror("Помилка","Немає рахунку для змін")
+        else:
+            messagebox.showerror("Помилка", "Заповніть поле з новим описом рахунку")

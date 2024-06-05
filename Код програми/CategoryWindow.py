@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter.ttk import Treeview
+from tkinter import messagebox
 from dbCategory import *
+
 
 class Category(Toplevel):
     def __init__(self):
@@ -24,15 +26,15 @@ class Category(Toplevel):
         self.table = Treeview(self, columns=("ID", "Назва"), show="headings", height=8,selectmode="browse")
         self.table.place(x=65, y=180)
 
-        self.updateTable()
-
         headings = {"ID": 20, "Назва": 100}
         for head in headings:
             self.table.heading(head, text=head)
             self.table.column(head, anchor="center", width=headings[head])
 
+        self.updateTable()
+
     def getIdList(self):
-        categories = print_all_categories()
+        categories = DbCategories().print_all_categories()
         newList = []
         if categories == []: newList.append("Пусто")
         else:
@@ -41,32 +43,36 @@ class Category(Toplevel):
     def updateIdList(self):
         categories = self.getIdList()
         self.listId = StringVar(self)
-        self.listId.set(categories[0] if categories else "")
+        self.listId.set(categories[0] if categories else "Пусто")
         self.idMenu = OptionMenu(self, self.listId, *categories)
         self.idMenu.config(width=7, height=1, font="Arial 10")
         self.idMenu.place(x=152, y=19)
     def updateTable(self):
         self.table.delete(*self.table.get_children())
-        rows = print_all_categories()
+        rows = DbCategories().print_all_categories()
         for row in rows: self.table.insert('', 'end', values=(row[0], row[1]))
     def createCategory(self):
         name = self.сategoryText.get().lower()
         if name != "":
-            create_category(name)
+            DbCategories().create_category(name)
             self.updateIdList()
             self.updateTable()
             self.сategoryText.delete(0, END)
+        else:
+            messagebox.showerror("Помилка", "Заповніть поле з назвою категорії")
     def deleteCategory(self):
         try:
-            delete_category(int(self.listId.get()))
+            DbCategories().delete_category(int(self.listId.get()))
             self.updateIdList()
             self.updateTable()
-        except ValueError: print("Пусто")
+        except ValueError: messagebox.showerror("Помилка","Немає категорій для видалення")
     def updateCategory(self):
         name = self.сategoryText.get().lower()
         if name != "":
             try:
-                update_category(int(self.listId.get()),name)
+                DbCategories().update_category(int(self.listId.get()), name)
                 self.updateTable()
                 self.сategoryText.delete(0, END)
-            except ValueError:print("Пусто")
+            except ValueError:messagebox.showerror("Помилка","Немає категорій для зміни")
+        else:
+            messagebox.showerror("Помилка", "Заповніть поле з новою назвою категорії")
