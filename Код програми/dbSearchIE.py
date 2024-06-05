@@ -1,8 +1,6 @@
 import sqlite3
-
-class DbSearch:
-    def get_connection(self):
-        return sqlite3.connect('database.db')
+from dbWorkWith import *
+class DbSearch(Db):
     def create_db(self):
         with self.get_connection() as connection:
             cursor = connection.cursor()

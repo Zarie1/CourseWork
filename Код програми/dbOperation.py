@@ -1,9 +1,7 @@
 import sqlite3
+from dbWorkWith import *
 
-class DbOperatons():
-    def get_connection(self):
-        return sqlite3.connect('database.db')
-
+class DbOperatons(Db):
     # Додавання до таблиці Income
     def add_income(self, account_id, category_id, count, date):
         with self.get_connection() as connection:

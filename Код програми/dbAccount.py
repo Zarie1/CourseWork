@@ -1,9 +1,7 @@
 import sqlite3
+from dbWorkWith import *
 
-class DbAccount():
-    def get_connection(self):
-        return sqlite3.connect('database.db')
-
+class DbAccount(Db):
     # Створення таблиці Account
     def create_account(self, name, type):
         with self.get_connection() as connection:

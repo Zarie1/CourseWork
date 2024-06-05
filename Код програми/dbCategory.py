@@ -1,10 +1,7 @@
 import sqlite3
+from dbWorkWith import *
 
-
-class DbCategories():
-    def get_connection(self):
-        return sqlite3.connect('database.db')
-
+class DbCategories(Db):
     # Створення таблиці Categories
     def create_category(self, name):
         with self.get_connection() as connection:
