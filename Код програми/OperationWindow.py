@@ -89,7 +89,6 @@ class Operation(Toplevel):
     def updateIdAccountsList(self):
         self.allAccountsData = DbAccount().print_account_data()
         accountes = []
-        self.listOfAccountData = []
         if self.allAccountsData == []: accountes.append("Пусто")
         else:
             for account in self.allAccountsData: accountes.append(account[1])

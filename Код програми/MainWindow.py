@@ -86,5 +86,3 @@ class MainWin():
                         self.table.column(head, anchor="center", width=headings[head])
 
                 mainwin.mainloop()
-root = MainWin()
-root.doWin()

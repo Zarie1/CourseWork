@@ -18,9 +18,21 @@ class DbAccount(Db):
             cursor.execute('''
             DELETE FROM Account WHERE id = ?
             ''', (account_id,))
+            cursor.execute('SELECT COUNT(*) FROM Income WHERE account_id = ?', (account_id,))
+            income_count = cursor.fetchone()[0]
+            if income_count > 0:
+                cursor.execute('''
+                            DELETE FROM Income WHERE account_id = ?
+                            ''', (account_id,))
+            cursor.execute('SELECT COUNT(*) FROM Expenses WHERE account_id = ?', (account_id,))
+            expenses_count = cursor.fetchone()[0]
+            if expenses_count > 0:
+                cursor.execute('''
+                            DELETE FROM Expenses WHERE account_id = ?
+                            ''', (account_id,))
             cursor.execute('''
-            UPDATE Account SET id = id - 1 WHERE id > ?
-            ''', (account_id,))
+                        UPDATE Account SET id = id - 1 WHERE id > ?
+                        ''', (account_id,))
             connection.commit()
 
     # Зміна назви рахунку за ідентифікатором
